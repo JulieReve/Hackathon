@@ -7,6 +7,7 @@
 #include "Peripheral.h"
 #include "Led.h"
 #include "Ultrasonic.h"
+#include "json.h"
 
 
 Application::Application()
@@ -18,6 +19,7 @@ Application::~Application()
 void Application::init(void)
 {
    Serial.begin(115200);   // Open serial communication at 115200 baud
+   initjson();
    Serial.println("Initialisation réussie");
 }
 
@@ -29,12 +31,11 @@ void Application::run(void)
   myLed.init();
   myUltra.init();
   int led_brightness = 0;
+  bool dataPresentNotSend = true;
+  bool dataNobodyNotSend = true;
 
-  
-  //myLed.high();
-  //delay(2000);
-  //myLed.low();
-  //delay(2000);
+  // Données JSON à envoyer
+  String jsonData = "{\"nom\": \"Dudu\", \"email\": \"j@e.com\"}";
 
   while(true){
     Serial.println("The distance to obstacles in front is: ");
@@ -42,14 +43,34 @@ void Application::run(void)
     long RangeInMillimeters = myUltra.MeasureInMillimeters();
     Serial.print(RangeInMillimeters);
     Serial.println(" mm");
-    if (RangeInMillimeters < 2000 and led_brightness < 255){
+    if (RangeInMillimeters < 1000 and led_brightness < 255){
       myLed.increaseBrightness(led_brightness);
       led_brightness = led_brightness + 10;
+
+      if (dataPresentNotSend){
+        if (sendJSON(jsonData)) {
+          Serial.println("✅ Données envoyées avec succès !");
+        } else {
+          Serial.println("❌ Erreur lors de l'envoi !");
+        }
+        dataPresentNotSend = false;
+        dataNobodyNotSend = true;
       }
-     if (RangeInMillimeters > 2000 and led_brightness >= 0){
+     }
+     if (RangeInMillimeters > 1000 and led_brightness >= 0){
       myLed.decreaseBrightness(led_brightness);
       led_brightness = led_brightness - 10;
+
+      if(dataNobodyNotSend){
+        if (deleteData("1")) { // supprime l'élément avec id = 1
+          Serial.println("✅ Donnée supprimée avec succès !");
+        } else {
+          Serial.println("❌ Erreur lors de la suppression !");
+        }
+        dataNobodyNotSend = false;
+        dataPresentNotSend = true;
       }
+     }
      Serial.println(led_brightness);
     delay(250);
   }
