@@ -19,7 +19,7 @@ Led::Led(int pin) : Peripheral("Led"), pin(pin) {}
  * Sets the pin mode to OUTPUT and ensures the LED is turned off by default.
  */
 void Led::init() {
-  Serial.begin(921600);        // Initialize serial communication at 115200 baud
+  Serial.begin(115200);        // Initialize serial communication at 115200 baud
   pinMode(pin, OUTPUT);        // Configure the pin as an output
   digitalWrite(pin, LOW);      // Turn the LED off by default
 }
@@ -36,4 +36,16 @@ void Led::low() {
  */
 void Led::high() {
   digitalWrite(pin, HIGH);     // Turn the LED on
+}
+
+void Led::increaseBrightness(int led_brightness){
+  if(led_brightness <= 255){
+    analogWrite(pin, led_brightness);
+  }
+}
+
+void Led::decreaseBrightness(int led_brightness){
+  if(led_brightness >= 0){
+    analogWrite(pin, led_brightness);
+  }
 }

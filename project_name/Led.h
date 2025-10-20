@@ -15,6 +15,7 @@
 class Led : public Peripheral {
 private:
     int pin;  // Pin connected to the LED
+    int led_brightness;
 
 public:
     /**
@@ -43,6 +44,9 @@ public:
      * @brief Turns the LED OFF
      */
     void low();
+
+    void increaseBrightness(int led_brightness);
+    void decreaseBrightness(int led_brightness);
 };
 
 #endif 
