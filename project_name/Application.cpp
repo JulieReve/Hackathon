@@ -35,7 +35,7 @@ void Application::run(void)
   bool dataNobodyNotSend = true;
 
   // Données JSON à envoyer
-  String jsonData = "{\"nom\": \"Dudu\", \"email\": \"j@e.com\"}";
+  String jsonData = "{\"nom\": \"Paul Sabatier\"}";
 
   while(true){
     Serial.println("The distance to obstacles in front is: ");
