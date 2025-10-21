@@ -108,22 +108,22 @@ void setup() {
     lcd.print(".");
     Serial.print(WiFi.status());
   }
+  lcd.clear();
   Serial.println("\nWiFi connecté !");
-  lcd.print("Connected to ");lcd.print(ssid);
+  lcd.print("Connected");
   delay(1000);
   lcd.clear();   
   //NTPClient
   timeClient.begin();
   timeClient.setTimeOffset(7200);
-
 }
 
 void loop() {
   timeClient.update();
   String formattedTime = timeClient.getFormattedTime().substring(0,5);
 
-  String info1 = nombus44 + " " + ps + " " + String(prochainBus(bus44, nbbus44)) + "min";
-  String info2 = nombusL7 + " " + ps + " " + String(prochainBus(busL7, nbbusL7)) + "min";
+  String info1 = nombus44 + " " + ps + " " + String(prochainBus(bus44, nbbus44)) + "mn";
+  String info2 = nombusL7 + " " + ps + " " + String(prochainBus(busL7, nbbusL7)) + "mn";
   String ligne1 = info1.substring(pos, pos + 16);
   String ligne2 = info2.substring(pos, pos + 16);
   lcd.setCursor(0,0);
@@ -134,7 +134,7 @@ void loop() {
   pos++;
   if (pos > max(info1.length(), info2.length()) - 16) {
     
-    delay(3000);
+    delay(5000);
     lcd.clear();
     pos = 0;
     lcd.setCursor(5,0);
